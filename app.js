@@ -1,66 +1,60 @@
-function sortear() {
-    let quantidade = parseInt(document.getElementById('quantidade').value);
-    let deNumero = parseInt(document.getElementById('de').value);
-    let ateNumero = parseInt(document.getElementById('ate').value);
+function draw() {
+    let quantity = parseInt(document.getElementById('quantity').value);
+    let fromNumber = parseInt(document.getElementById('from').value);
+    let toNumber = parseInt(document.getElementById('to').value);
 
-    if (quantidade > ateNumero || deNumero > ateNumero) {
-        alert('Números inválidos')
-        reiniciar();
-        alterarStatusBotao()
+    if (quantity > toNumber || fromNumber > toNumber) {
+        alert('Invalid numbers');
+        reset();
+        toggleButtonStatus();
         return;
-
     }
 
-    if (quantidade > (ateNumero - deNumero + 1)) {
-        alert("A quantidade de números não pode ser maior que o intervalo disponível.");
-        reiniciar();
-        alterarStatusBotao()
+    if (quantity > (toNumber - fromNumber + 1)) {
+        alert("The quantity of numbers cannot exceed the available range.");
+        reset();
+        toggleButtonStatus();
         return;    
-    };
+    }
 
-    if (isNaN(quantidade) || isNaN(deNumero) || isNaN(ateNumero)) {
-        alert('Por favor, preencha todos os campos com valores numéricos.');
+    if (isNaN(quantity) || isNaN(fromNumber) || isNaN(toNumber)) {
+        alert('Please fill in all fields with numeric values.');
         return;
     }
 
-    let sorteados = [];
-    let numero;
+    let drawnNumbers = [];
+    let number;
 
-    for (let i = 0; i < quantidade; i++) {
-        numero = obterNumeroAleatorio(deNumero, ateNumero);
-        sorteados.push(numero);
+    for (let i = 0; i < quantity; i++) {
+        number = getRandomNumber(fromNumber, toNumber);
+        drawnNumbers.push(number);
     }
 
-    let resultado = document.getElementById('resultado');
-    resultado.innerHTML = `<label class="texto__paragrafo">Números sorteados: ${sorteados}</label>`;
+    let result = document.getElementById('result');
+    result.innerHTML = `<label class="text__paragraph">Drawn numbers: ${drawnNumbers}</label>`;
 
-
-    alterarStatusBotao();
-
+    toggleButtonStatus();
 }
 
-function obterNumeroAleatorio(min, max) {
+function getRandomNumber(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
-
 }
 
-function alterarStatusBotao() {
-    let botao = document.getElementById('btn-reiniciar');
-    if (botao.classList.contains('container__botao-desabilitado')) {
-        botao.classList.remove('container__botao-desabilitado');
-        botao.classList.add('container__botao');
-    }else {
-        botao.classList.remove('container__botao');
-        botao.classList.add('container__botao-desabilitado');
-
-
+function toggleButtonStatus() {
+    let button = document.getElementById('btn-reset');
+    if (button.classList.contains('button__disabled')) {
+        button.classList.remove('button__disabled');
+        button.classList.add('button__enabled');
+    } else {
+        button.classList.remove('button__enabled');
+        button.classList.add('button__disabled');
     }
 }
 
-function reiniciar() {
-    document.getElementById('quantidade').value = '';
-    document.getElementById('de').value = '';
-    document.getElementById('ate').value = '';
-    document.getElementById('resultado').innerHTML = '<label class="texto__paragrafo">Números sorteados:  nenhum até agora</label>';
-    alterarStatusBotao();
+function reset() {
+    document.getElementById('quantity').value = '';
+    document.getElementById('from').value = '';
+    document.getElementById('to').value = '';
+    document.getElementById('result').innerHTML = '<label class="text__paragraph">Drawn numbers: none yet</label>';
+    toggleButtonStatus();
 }
